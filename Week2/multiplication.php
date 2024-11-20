@@ -5,12 +5,12 @@
     </head>
     <body>
         <?php
-        $num = 0;
+        $num = 5;
         for ($x = 1; $x <= 10; $x++)
         {
             
-            $num += 5;
-            echo "5 x " . $x . " = " . $num . "<br>";
+            $total = $num * $x;
+            echo "5 x " . $x . " = " . $total . "<br>";
         }
         ?>
     </body>
