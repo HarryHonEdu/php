@@ -30,6 +30,8 @@ if (isset($_GET["name"]))
   <?php
   if(!(empty($_GET)))
   {
+    echo "Welcome: " . $_GET["name"] . "<br>";
+
     $email = $_GET["email"];
 
     if(filter_var($email, FILTER_VALIDATE_EMAIL))
