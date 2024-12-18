@@ -62,7 +62,7 @@
                     echo "</ul></div>";
                 } else {
                     // insert query
-                    $query = "INSERT INTO customer SET username=:username, password=:password, first_name=:first_name, last_name=:last_name, 
+                    $query = "INSERT INTO customers SET username=:username, password=:password, first_name=:first_name, last_name=:last_name, 
                     gender=:gender, date_of_birth=:date_of_birth";
                     // prepare query for execution
                     $stmt = $con->prepare($query);
@@ -76,7 +76,7 @@
                     // specify when this record was inserted to the database
                     // Execute the query
                     if ($stmt->execute()) {
-                        echo "<div class='alert alert-success'>Product was added.</div>";
+                        echo "<div class='alert alert-success'>Customer was added.</div>";
                     } else {
                         echo "<div class='alert alert-danger'>Unable to save record.</div>";
                     }
