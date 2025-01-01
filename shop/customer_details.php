@@ -8,7 +8,9 @@
 </head>
 
 <body>
-
+    <?php
+    include 'menu.php';
+    ?>
     <!-- container -->
     <div class="container">
         <div class="page-header">
@@ -23,7 +25,7 @@
 
         //include database connection
         include 'config/database.php';
-
+        include 'menu.php';
         // read current record's data
         try {
             // prepare select query

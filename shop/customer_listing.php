@@ -8,6 +8,9 @@
 </head>
 
 <body>
+    <?php
+    include 'menu.php';
+    ?>
     <!-- container -->
     <div class="container">
         <div class="page-header">
@@ -19,7 +22,6 @@
         <?php
         // include database connection
         include 'config/database.php';
-
         // delete message prompt will be here
         
         // select all data

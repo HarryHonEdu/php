@@ -11,12 +11,16 @@
 </head>
 
 <body>
+    <?php
+    include 'menu.php';
+    ?>
     <!-- container -->
     <div class="container">
         <div class="page-header">
             <h1>Create Customer</h1>
         </div>
         <?php
+
         if ($_POST) {
             // include database connection
             include 'config/database.php';

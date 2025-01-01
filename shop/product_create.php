@@ -12,6 +12,9 @@
 
 <body>
 
+    <?php
+    include 'menu.php';
+    ?>
 
     <?php
     // include database connection

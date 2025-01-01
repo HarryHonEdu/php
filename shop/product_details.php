@@ -8,7 +8,9 @@
 </head>
 
 <body>
-
+    <?php
+    include 'menu.php';
+    ?>
     <!-- container -->
     <div class="container">
         <div class="page-header">
@@ -27,7 +29,8 @@
         // read current record's data
         try {
             // prepare select query
-            $query = "SELECT id, name, description, price FROM products WHERE id = ? LIMIT 0,1";
+            $query = "SELECT id, name, description, price, product_cat_name FROM products 
+            INNER JOIN product_cat ON products.product_cat = product_cat.product_cat_id WHERE id = ? LIMIT 0,1";
             $stmt = $con->prepare($query);
 
             // this is the first question mark
@@ -43,6 +46,7 @@
             $name = $row['name'];
             $description = $row['description'];
             $price = $row['price'];
+            $product_cat = $row['product_cat_name'];
         }
 
         // show error
@@ -64,6 +68,10 @@
             <tr>
                 <td>Price</td>
                 <td><?php echo htmlspecialchars($price, ENT_QUOTES); ?></td>
+            </tr>
+            <tr>
+                <td>Product Category</td>
+                <td><?php echo htmlspecialchars($product_cat, ENT_QUOTES); ?></td>
             </tr>
             <tr>
                 <td></td>
