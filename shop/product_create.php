@@ -127,7 +127,7 @@
                 $errors[] = 'Price is required.';
             }
             //Check promotion price
-            if (!is_int($promotion_price)) {
+            if (!is_int($promotion_price) && !empty($promotion_price)) {
                 if ($promotion_price > $price) {
                     $errors[] = 'Promotion price must be lower than price.';
                 }
