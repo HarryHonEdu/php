@@ -31,6 +31,70 @@
 
     ?>
 
+    <!-- container -->
+    <div class="container">
+        <div class="page-header">
+            <h1>Create Product</h1>
+        </div>
+
+        <!-- html form to create product will be here -->
+
+
+
+        <form action='<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>' method="post">
+            <table class='table table-hover table-responsive table-bordered'>
+                <tr>
+                    <td>Name</td>
+                    <td><input type='text' name='name' class='form-control' /></td>
+                </tr>
+                <tr>
+                    <td>Description</td>
+                    <td><textarea name='description' class='form-control'></textarea></td>
+                </tr>
+                <tr>
+                    <td>Price</td>
+                    <td><input type='text' name='price' class='form-control' /></td>
+                </tr>
+                <tr>
+                    <td>Promotion Price</td>
+                    <td><input type='text' name='promotion_price' class='form-control' /></td>
+                </tr>
+                <tr>
+                    <td>Manufacture Date</td>
+                    <td><input type='datetime-local' name='manufacture_date' class='form-control' /></td>
+                </tr>
+                <tr>
+                    <td>Expired Date</td>
+                    <td><input type='datetime-local' name='expired_date' class='form-control' /></td>
+                </tr>
+                <tr>
+                    <td>Proudct Category</td>
+                    <td><label for="category">Choose a Category:</label>
+                        <select name="category" id="category">
+                            <?php
+                            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                                // extract row
+                                // this will make $row['firstname'] to just $firstname only
+                                extract($row);
+                                // creating new table row per record
+                                echo '<option value="' . $product_cat_id . '">' . $product_cat_name . '</option>';
+                            }
+                            ?>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <input type='submit' value='Save' class='btn btn-primary' />
+                        <a href='product_listing.php' class='btn btn-danger'>Back to read products</a>
+                    </td>
+                </tr>
+            </table>
+        </form>
+
+    </div>
+    <!-- end .container -->
     <?php
     if ($_POST) {
         // include database connection
@@ -41,10 +105,12 @@
             $description = $_POST['description'];
             $price = $_POST['price'];
             $promotion_price = $_POST['promotion_price'];
-            $manufacture_date = $_POST['manufacture_date'];
-            $expired_date = $_POST['expired_date'];
+            $manufacture_date_string = $_POST['manufacture_date'];
+            $expired_date_string = $_POST['expired_date'];
             $product_category = $_POST['category'];
             $errors = [];
+            $manufacture_date = DateTime::createFromFormat('Y-m-d\TH:i', $manufacture_date_string);
+            $expired_date = DateTime::createFromFormat('Y-m-d\TH:i', $expired_date_string);
             //Check name
             if (empty($name)) {
                 $errors[] = 'Name is required.';
@@ -126,70 +192,7 @@
     }
     ?>
 
-    <!-- container -->
-    <div class="container">
-        <div class="page-header">
-            <h1>Create Product</h1>
-        </div>
 
-        <!-- html form to create product will be here -->
-
-
-
-        <form action='<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>' method="post">
-            <table class='table table-hover table-responsive table-bordered'>
-                <tr>
-                    <td>Name</td>
-                    <td><input type='text' name='name' class='form-control' /></td>
-                </tr>
-                <tr>
-                    <td>Description</td>
-                    <td><textarea name='description' class='form-control'></textarea></td>
-                </tr>
-                <tr>
-                    <td>Price</td>
-                    <td><input type='text' name='price' class='form-control' /></td>
-                </tr>
-                <tr>
-                    <td>Promotion Price</td>
-                    <td><input type='text' name='promotion_price' class='form-control' /></td>
-                </tr>
-                <tr>
-                    <td>Manufacture Date</td>
-                    <td><input type='date' name='manufacture_date' class='form-control' /></td>
-                </tr>
-                <tr>
-                    <td>Expired Date</td>
-                    <td><input type='date' name='expired_date' class='form-control' /></td>
-                </tr>
-                <tr>
-                    <td>Proudct Category</td>
-                    <td><label for="category">Choose a Category:</label>
-                        <select name="category" id="category">
-                            <?php
-                            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                                // extract row
-                                // this will make $row['firstname'] to just $firstname only
-                                extract($row);
-                                // creating new table row per record
-                                echo '<option value="' . $product_cat_id . '">' . $product_cat_name . '</option>';
-                            }
-                            ?>
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>
-                        <input type='submit' value='Save' class='btn btn-primary' />
-                        <a href='index.php' class='btn btn-danger'>Back to read products</a>
-                    </td>
-                </tr>
-            </table>
-        </form>
-
-    </div>
-    <!-- end .container -->
 </body>
 
 </html>
