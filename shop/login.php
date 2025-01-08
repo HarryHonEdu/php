@@ -1,4 +1,28 @@
 <!DOCTYPE html>
+<?php
+include 'config/database.php';
+if ($_POST) {
+    try {
+        $email = $_POST["email"];
+        $password = $_POST["password"];
+        $errors = [];
+
+        if (empty($email)) {
+            $errors[] = "Please enter your email / username.";
+        }
+        if (empty($password)) {
+            $errors[] = "Please enter your password.";
+        }
+
+
+    } catch (PDOException $exception) {
+        die('ERROR: ' . $exception->getMessage());
+    }
+}
+session_start();
+session_regenerate_id(true);
+?>
+<html>
 
 <head>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -47,7 +71,7 @@
             <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
 
             <div class="form-floating">
-                <input type="email" class="form-control" name="email" id="floatingInput" placeholder="name@example.com">
+                <input type="text" class="form-control" name="email" id="floatingInput" placeholder="name@example.com">
                 <label for="floatingInput">Email/Username</label>
             </div>
             <div class="form-floating">
@@ -58,25 +82,51 @@
 
             <?php
             if ($_POST) {
-                $email = $_POST["email"];
-                $password = $_POST["password"];
-                $errors = [];
-
-                if (empty($email)) {
-                    $errors[] = "Please enter your email / username.";
-                }
-                if (empty($password)) {
-                    $errors[] = "Please enter your password.";
-                }
-
                 if (!empty($errors)) {
                     echo "<div class='alert alert-danger'><ul>";
                     foreach ($errors as $error) {
                         echo "<li>{$error}</li>";
                     }
                     echo "</ul></div>";
+                } else {
+                    $query = "SELECT username, password, account_status FROM customers WHERE username = ? LIMIT 1";
+
+                    $stmt = $con->prepare($query);
+                    $stmt->bindParam(1, $email);
+                    $stmt->execute();
+
+                    $num = $stmt->rowCount();
+
+                    if ($num > 0) {
+                        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+                        $fetched_password = $row['password'];
+                        $fetched_status = $row['account_status'];
+                        if ($fetched_password === $password) {
+                            if ($fetched_status == 1) {
+                                $_SESSION['user_id'] = 1;
+                                $_SESSION['username'] = $email;
+                                $_SESSION['is_logged_in'] = true;
+                                header('Location: product_listing.php');
+                                exit();
+                            } else {
+                                echo "<div class='alert alert-danger'><ul>";
+                                echo "<li>Account is not active. Please contact support.</li>";
+                                echo "</ul></div>";
+                            }
+                        } else {
+                            echo "<div class='alert alert-danger'><ul>";
+                            echo "<li>Invalid Password.</li>";
+                            echo "</ul></div>";
+                        }
+                    } else {
+                        echo "<div class='alert alert-danger'><ul>";
+                        echo "<li>Invalid Username.</li>";
+                        echo "</ul></div>";
+                    }
                 }
             }
+
+
             ?>
             <button class="btn btn-custom w-100 py-2" type="submit">Sign in</button>
         </form>
