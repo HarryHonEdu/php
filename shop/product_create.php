@@ -1,4 +1,68 @@
 <!DOCTYPE HTML>
+<?php
+include 'config/database.php';
+if ($_POST) {
+    try {
+        // posted values
+        $name = $_POST['name'];
+        $description = $_POST['description'];
+        $price = $_POST['price'];
+        $promotion_price = $_POST['promotion_price'];
+        $manufacture_date_string = $_POST['manufacture_date'];
+        $expired_date_string = $_POST['expired_date'];
+        $product_cat = '';
+        $errors = [];
+        $manufacture_date = DateTime::createFromFormat('Y-m-d\TH:i', $manufacture_date_string);
+        $expired_date = DateTime::createFromFormat('Y-m-d\TH:i', $expired_date_string);
+        //Check name
+        if (empty($name)) {
+            $errors[] = 'Name is required.';
+        }
+        //Check description
+        if (empty($description)) {
+            $errors[] = 'Description is required.';
+        }
+        //Check price
+        if (empty($price)) {
+            $errors[] = 'Price is required.';
+        }
+        if (!is_numeric($price) && !empty($price)) {
+            $errors[] = 'Price must be number(s).';
+        }
+        //Check promotion price
+        if (!is_numeric($promotion_price) && !empty($promotion_price)) {
+            $errors[] = 'Promotion price must be number(s).';
+        }
+        if (is_numeric($promotion_price) > is_numeric(($price))) {
+            $errors[] = 'Promotion price must be lower than price.';
+        }
+        //Check manufacture date
+        if (empty($manufacture_date)) {
+            $errors[] = 'Manufacture Date is empty.';
+        }
+        //Check expired date
+        if (empty($expired_date)) {
+            $errors[] = 'Expired Date is empty.';
+        }
+        if (!empty($manufacture_date) && !empty($expired_date)) {
+            $diff = date_diff($manufacture_date, $expired_date);
+            if ($diff->invert == 1) {
+                $errors[] = "Expired Date must be later than Manufacture Date.";
+            }
+        }
+        //Check Category
+        if (isset($_POST['category']) && !empty($_POST['category'])) {
+            $product_cat = $_POST['category'];
+        } else {
+            $errors[] = "Choose a product category.";
+        }
+
+    } // show error
+    catch (PDOException $exception) {
+        die('ERROR: ' . $exception->getMessage());
+    }
+}
+?>
 <html>
 
 <head>
@@ -7,21 +71,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="icon"
+        href="https://upload-os-bbs.hoyolab.com/upload/2022/06/13/100427891/51296d07ef153ca7dd744dc31874d548_4734072724131588175.png"
+        type="image/png">
 
 </head>
 
 <body>
 
     <?php
+    // Check if the user is logged in
+    session_start();
+    session_regenerate_id(true);
     if (!isset($_SESSION['is_logged_in']) || $_SESSION['is_logged_in'] !== true) {
         header('Location: login.php'); // Redirect to login page if not logged in
         exit();
     }
-    session_start();
-    session_regenerate_id(true);
     include 'menu.php';
-    // Check if the user is logged in
-    
 
     ?>
 
@@ -80,6 +146,7 @@
                     <td>Proudct Category</td>
                     <td><label for="category">Choose a Category:</label>
                         <select name="category" id="category">
+                            <option value="" selected disabled>Select a category</option>
                             <?php
                             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                                 // extract row
@@ -92,6 +159,50 @@
                         </select>
                     </td>
                 </tr>
+                <?php
+                if ($_POST) {
+                    try {
+                        include 'config/database.php';
+                        //If there is errors, show them
+                        if (!empty($errors)) {
+                            echo "<div class='alert alert-danger'><ul>";
+                            foreach ($errors as $error) {
+                                echo "<li>{$error}</li>";
+                            }
+                            echo "</ul></div>";
+                        } else {
+                            $manufacture_date_string = $manufacture_date->format('Y-m-d H:i:s');
+                            $expired_date_string = $expired_date->format('Y-m-d H:i:s');
+                            // insert query
+                            $query = "INSERT INTO products (name, description, price, promotion_price, manufacture_date, expired_date, product_cat, created) 
+                VALUES (:name, :description, :price, :promotion_price, :manufacture_date, :expired_date, :product_cat, :created)";
+                            // prepare query for execution
+                            $stmt = $con->prepare($query);
+                            // bind the parameters
+                            $stmt->bindParam(':name', $name);
+                            $stmt->bindParam(':description', $description);
+                            $stmt->bindParam(':product_cat', $product_cat);
+                            $stmt->bindParam(':price', $price);
+                            $stmt->bindParam(':promotion_price', $promotion_price);
+                            $stmt->bindParam(':manufacture_date', $manufacture_date_string);
+                            $stmt->bindParam(':expired_date', $expired_date_string);
+                            // specify when this record was inserted to the database
+                            $created = date('Y-m-d H:i:s');
+                            $stmt->bindParam(':created', $created);
+                            // Execute the query
+                            if ($stmt->execute()) {
+                                echo "<div class='alert alert-success'>Product was added.</div>";
+                            } else {
+                                echo "<div class='alert alert-danger'>Unable to save record.</div>";
+                            }
+                        }
+                    }
+                    // show error
+                    catch (PDOException $exception) {
+                        die('ERROR: ' . $exception->getMessage());
+                    }
+                }
+                ?>
                 <tr>
                     <td></td>
                     <td>
@@ -104,102 +215,7 @@
 
     </div>
     <!-- end .container -->
-    <?php
-    if ($_POST) {
-        // include database connection
-        include 'config/database.php';
-        try {
-            // posted values
-            $name = $_POST['name'];
-            $description = $_POST['description'];
-            $price = $_POST['price'];
-            $promotion_price = $_POST['promotion_price'];
-            $manufacture_date_string = $_POST['manufacture_date'];
-            $expired_date_string = $_POST['expired_date'];
-            $product_category = $_POST['category'];
-            $errors = [];
-            $manufacture_date = DateTime::createFromFormat('Y-m-d\TH:i', $manufacture_date_string);
-            $expired_date = DateTime::createFromFormat('Y-m-d\TH:i', $expired_date_string);
-            //Check name
-            if (empty($name)) {
-                $errors[] = 'Name is required.';
-            }
-            //Check description
-            if (empty($description)) {
-                $errors[] = 'Description is required.';
-            }
-            //Check price
-            if (empty($price)) {
-                if (!is_int($price)) {
-                    $errors[] = 'Price must be number(s).';
-                }
-                $errors[] = 'Price is required.';
-            }
-            //Check promotion price
-            if (!is_int($promotion_price) && !empty($promotion_price)) {
-                if ($promotion_price > $price) {
-                    $errors[] = 'Promotion price must be lower than price.';
-                }
-                $errors[] = 'Promotion price must be number(s).';
-            }
-            //Check manufacture date
-            if (empty($manufacture_date)) {
-                $errors[] = 'Manufacture Date is empty.';
-            } else {
-                if (checkdate(12, 31, -400)) {
-                    $errors[] = 'Manufacture Date is not valid.';
-                }
-            }
-            //Check expired date
-            if (empty($expired_date)) {
-                $errors[] = 'Expired Date is empty.';
-            } else {
-                $diff = date_diff($manufacture_date, $expired_date);
-                if ($diff->invert == 1) {
-                    $errors[] = "Expired Date must be later than Manufacture Date.";
-                }
 
-            }
-            //Check Category
-            if (empty($product_category)) {
-                $errors[] = "Choose a product category.";
-            }
-            //If there is errors, show them
-            if (!empty($errors)) {
-                echo "<div class='alert alert-danger'><ul>";
-                foreach ($errors as $error) {
-                    echo "<li>{$error}</li>";
-                }
-                echo "</ul></div>";
-            } else {
-                // insert query
-                $query = "INSERT INTO products SET name=:name, description=:description, price=:price, promotion_price=:promotion_price, manufacture_date=:manufactured_date, expired_date=:expired_date, created=:created";
-                // prepare query for execution
-                $stmt = $con->prepare($query);
-                // bind the parameters
-                $stmt->bindParam(':name', $name);
-                $stmt->bindParam(':description', $description);
-                $stmt->bindParam(':price', $price);
-                $stmt->bindParam(':promotion_price', $promotion_price);
-                $stmt->bindParam(':manufacture_date', $manufacture_date);
-                $stmt->bindParam(':expired_date', $expired_date);
-                // specify when this record was inserted to the database
-                $created = date('Y-m-d H:i:s');
-                $stmt->bindParam(':created', $created);
-                // Execute the query
-                if ($stmt->execute()) {
-                    echo "<div class='alert alert-success'>Product was added.</div>";
-                } else {
-                    echo "<div class='alert alert-danger'>Unable to save record.</div>";
-                }
-            }
-        }
-        // show error
-        catch (PDOException $exception) {
-            die('ERROR: ' . $exception->getMessage());
-        }
-    }
-    ?>
 
 
 </body>

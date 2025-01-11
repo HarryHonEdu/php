@@ -5,16 +5,19 @@
     <title>PDO - Create a Record - PHP CRUD Tutorial</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="icon"
+        href="https://upload-os-bbs.hoyolab.com/upload/2022/06/13/100427891/51296d07ef153ca7dd744dc31874d548_4734072724131588175.png"
+        type="image/png">
 </head>
 
 <body>
     <?php
+    session_start();
+    session_regenerate_id(true);
     if (!isset($_SESSION['is_logged_in']) || $_SESSION['is_logged_in'] !== true) {
         header('Location: login.php'); // Redirect to login page if not logged in
         exit();
     }
-    session_start();
-    session_regenerate_id(true);
     include 'menu.php';
     // Check if the user is logged in
     
