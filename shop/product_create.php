@@ -74,7 +74,6 @@ if ($_POST) {
     <link rel="icon"
         href="https://upload-os-bbs.hoyolab.com/upload/2022/06/13/100427891/51296d07ef153ca7dd744dc31874d548_4734072724131588175.png"
         type="image/png">
-
 </head>
 
 <body>

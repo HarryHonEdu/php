@@ -1,8 +1,9 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
-        <a href="https://genshin.hoyoverse.com/en/" target="blank">
-            <img class="mb-4" src="https://logos-world.net/wp-content/uploads/2024/01/Genshin-Impact-Logo.png" alt=""
-                width="145" height="80">
+        <a href="https://zenless.hoyoverse.com/en-us/" target="blank">
+            <img class="mb-4"
+                src="https://upload-os-bbs.hoyolab.com/upload/2022/06/13/100427891/51296d07ef153ca7dd744dc31874d548_4734072724131588175.png"
+                alt="" width="130" height="160" style="padding: 30px; border-radius: 10px;">
         </a>
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"

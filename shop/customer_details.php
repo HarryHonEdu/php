@@ -37,7 +37,6 @@
 
         //include database connection
         include 'config/database.php';
-        include 'menu.php';
         // read current record's data
         try {
             // prepare select query
