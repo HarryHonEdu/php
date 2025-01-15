@@ -36,7 +36,7 @@
         // read current record's data
         try {
             // prepare select query
-            $query = "SELECT id, name, description, price, product_cat_name FROM products 
+            $query = "SELECT id, name, description, price, product_cat_name, manufacture_date, expired_date FROM products 
             INNER JOIN product_cat ON products.product_cat = product_cat.product_cat_id WHERE id = ? LIMIT 0,1";
             $stmt = $con->prepare($query);
 
@@ -54,6 +54,8 @@
             $description = $row['description'];
             $price = $row['price'];
             $product_cat = $row['product_cat_name'];
+            $manufacture_date = $row['manufacture_date'];
+            $expired_date = $row['expired_date'];
         }
 
         // show error
@@ -74,11 +76,19 @@
             </tr>
             <tr>
                 <td>Price</td>
-                <td><?php echo htmlspecialchars($price, ENT_QUOTES); ?></td>
+                <td>RM<?php echo htmlspecialchars($price, ENT_QUOTES); ?></td>
             </tr>
             <tr>
                 <td>Product Category</td>
                 <td><?php echo htmlspecialchars($product_cat, ENT_QUOTES); ?></td>
+            </tr>
+            <tr>
+                <td>Manufacture Date</td>
+                <td><?php echo htmlspecialchars($manufacture_date, ENT_QUOTES); ?></td>
+            </tr>
+            <tr>
+                <td>Expired Date</td>
+                <td><?php echo htmlspecialchars($expired_date, ENT_QUOTES); ?></td>
             </tr>
             <tr>
                 <td></td>
