@@ -44,8 +44,8 @@ include 'menu.php';
                 $price = $row['price'];
                 $product_cat = $row['product_cat'];
                 $promotion_price = $row['promotion_price'];
-                $manufacture_date = $row['manufacture_date'];
-                $expired_date = $row['expired_date'];
+                $fetched_manufacture_date = $row['manufacture_date'];
+                $fetched_expired_date = $row['expired_date'];
             }
 
             // show error
@@ -213,13 +213,13 @@ include 'menu.php';
                     <tr>
                         <td>Manufacture Date</td>
                         <td><input type='datetime-local' name='manufacture_date'
-                                value="<?= $manufacture_date->format('Y-m-d\TH:i') ?>" class='form-control' />
+                                value="<?= $fetched_manufacture_date ?>" class='form-control' />
                         </td>
                     </tr>
                     <tr>
                         <td>Expired Date</td>
-                        <td><input type='datetime-local' name='expired_date'
-                                value="<?= $expired_date->format('Y-m-d\TH:i') ?>" class='form-control' /></td>
+                        <td><input type='datetime-local' name='expired_date' value="<?= $fetched_expired_date ?>"
+                                class='form-control' /></td>
                     </tr>
                     <tr>
                         <td></td>
