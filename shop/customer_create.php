@@ -36,7 +36,7 @@
                 $password = $_POST['password'];
                 $firstname = $_POST['firstname'];
                 $lastname = $_POST['lastname'];
-                $gender = $_POST['gender'];
+
                 $dob = $_POST['dateofbirth'];
                 $errors = [];
                 //Check Username
@@ -56,7 +56,9 @@
                     $errors[] = 'Last Name is required.';
                 }
                 //Check Gender
-                if (empty($gender)) {
+                if (isset($_POST['gender']) && !empty($_POST['gender'])) {
+                    $gender = $_POST['gender'];
+                } else {
                     $errors[] = 'Gender is required.';
                 }
                 //Check Date Of Birth
@@ -136,7 +138,7 @@
                     <td></td>
                     <td>
                         <input type='submit' value='Save' class='btn btn-primary' />
-                        <a href='index.php' class='btn btn-danger'>Back to read products</a>
+                        <a href='customer_listing.php' class='btn btn-danger'>Back to read products</a>
                     </td>
                 </tr>
             </table>
@@ -145,3 +147,5 @@
     </div>
     <!-- end .container -->
 </body>
+
+</html>

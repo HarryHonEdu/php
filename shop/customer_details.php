@@ -28,18 +28,18 @@
         <?php
         // get passed parameter value, in this case, the record ID
         // isset() is a PHP function used to verify if a value is there or not
-        $name = isset($_GET['username']) ? $_GET['username'] : die('ERROR: Record Username not found.');
+        $userid = isset($_GET['userid']) ? $_GET['userid'] : die('ERROR: Record Username not found.');
 
         //include database connection
         include 'config/database.php';
         // read current record's data
         try {
             // prepare select query
-            $query = "SELECT username, password, first_name, last_name, gender, date_of_birth, registration_time, account_status FROM customers WHERE username = ? LIMIT 0,1";
+            $query = "SELECT user_id, username, password, first_name, last_name, gender, date_of_birth, registration_time, account_status FROM customers WHERE user_id = ? LIMIT 0,1";
             $stmt = $con->prepare($query);
 
             // this is the first question mark
-            $stmt->bindParam(1, $name);
+            $stmt->bindParam(1, $userid);
 
             // execute our query
             $stmt->execute();
@@ -48,6 +48,7 @@
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
             // values to fill up our form
+            $fetched_id = $row['user_id'];
             $fetched_name = $row['username'];
             $fetched_password = $row['password'];
             $first_name = $row['first_name'];
@@ -66,6 +67,10 @@
 
         <!-- HTML read one record table will be here -->
         <table class='table table-hover table-responsive table-bordered'>
+            <tr>
+                <td>User ID</td>
+                <td><?php echo htmlspecialchars($fetched_id, ENT_QUOTES); ?></td>
+            </tr>
             <tr>
                 <td>Username</td>
                 <td><?php echo htmlspecialchars($fetched_name, ENT_QUOTES); ?></td>
@@ -96,7 +101,17 @@
             </tr>
             <tr>
                 <td>Account Status</td>
-                <td><?php echo htmlspecialchars($account_status, ENT_QUOTES); ?></td>
+                <td><?php
+                $status = "";
+                if ($account_status == 1) {
+                    $status = "Active";
+                    echo htmlspecialchars($status, ENT_QUOTES);
+                }
+                if ($account_status == 0) {
+                    $status = "Inactive";
+                    echo htmlspecialchars($status, ENT_QUOTES);
+                }
+                ?></td>
             </tr>
             <tr>
                 <td></td>

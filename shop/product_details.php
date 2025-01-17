@@ -14,9 +14,6 @@
     <?php
     include 'validation.php';
     include 'menu.php';
-    // Check if the user is logged in
-    
-
     ?>
     <!-- container -->
     <div class="container">
