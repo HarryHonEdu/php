@@ -42,7 +42,7 @@
         $num = $stmt->rowCount();
 
         // link to create record form
-        echo "<br> <a href='product_create.php' class='btn btn-primary m-b-1em'>Create New Product</a>";
+        echo "<br> <a href='product_create.php' class='btn btn-primary m-b-1em mb-2'>Create New Product</a>";
 
         //check if more than 0 record found
         if ($num > 0) {
@@ -74,13 +74,13 @@
                 echo "<td>RM{$price}</td>";
                 echo "<td>";
                 // read one record
-                echo "<a href='product_details.php?id={$id}' class='btn btn-info m-r-1em'>Read</a>";
+                echo "<a href='product_details.php?id={$id}' class='btn btn-info m-r-1em me-2'>Read</a>";
 
                 // we will use this links on next part of this post
-                echo "<a href='product_update.php?id={$id}' class='btn btn-primary m-r-1em'>Edit</a>";
+                echo "<a href='product_update.php?id={$id}' class='btn btn-primary m-r-1em me-2'>Edit</a>";
 
                 // we will use this links on next part of this post
-                echo "<a href='#' onclick='delete_user({$id});'  class='btn btn-danger'>Delete</a>";
+                echo "<a href='#' onclick='delete_user({$id});'  class='btn btn-danger me-2'>Delete</a>";
                 echo "</td>";
                 echo "</tr>";
             }
