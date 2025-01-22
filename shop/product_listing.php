@@ -8,6 +8,7 @@
     <link rel="icon"
         href="https://upload-os-bbs.hoyolab.com/upload/2022/06/13/100427891/51296d07ef153ca7dd744dc31874d548_4734072724131588175.png"
         type="image/png">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 
 <body>
@@ -42,21 +43,33 @@
         $num = $stmt->rowCount();
 
         // link to create record form
-        echo "<br> <a href='product_create.php' class='btn btn-primary m-b-1em mb-2'>Create New Product</a>";
+        echo "<br> <div class='container-fiuld d-flex gap-2 justify-content-between align-items-center'>";
+        echo "<a href='product_create.php' class='btn btn-primary m-b-1em mb-2'>Create New Product</a>";
+        echo "<div class='d-flex align-items-center'>
+        <input type='text' class='form-control me-2 mb-2' placeholder='Search...' style='width: 200px; height: 38px;'></input>";
+        echo "<br><button type='submit' class='btn btn-primary m-b-1em mb-2'>Search</button>";
+        echo "</div></div>";
 
         //check if more than 0 record found
         if ($num > 0) {
-
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            extract($row);
             // data from database will be here
             echo "<table class='table table-hover table-responsive table-bordered'>";//start table
         
             //creating our table heading
             echo "<tr>";
             echo "<th>ID</th>";
-            echo "<th>Name</th>";
+            echo "<th><div class='d-flex gap-2 align-items-center'>Name
+                <a href='?sort=name&ascdesc=asc'><i class='fa-solid fa-caret-up'></i></a> <!-- Ascending sort icon -->       
+                <a href='?sort=name&ascdesc=desc'><i class='fa-solid fa-caret-down'></i> <!-- Descending sort icon -->
+            </div></th>";
             echo "<th>Description</th>";
             echo "<th>Category</th>";
-            echo "<th>Price</th>";
+            echo "<th><div class='d-flex gap-2'>Price
+                <a href='?sort=price&ascdesc=asc'><i class='fa-solid fa-caret-up'></i> <!-- Ascending sort icon -->
+                <a href='?sort=price&ascdesc=desc'><i class='fa-solid fa-caret-down'></i> <!-- Descending sort icon -->
+            </div></th>";
             echo "<th>Action</th>";
             echo "</tr>";
 

@@ -74,11 +74,18 @@ include 'menu.php';
                         $errors[] = "Please fill in all the fields to update your password.";
                     }
                 }
+
                 if (!empty($_POST['new_password']) && !empty($_POST['confirm_password'])) {
                     if ($_POST['new_password'] != $_POST['confirm_password']) {
-                        $errors[] = "New password and Confirm Password does not match.";
+                        $errors[] = "New password and confirm Password does not match.";
                     }
                 }
+
+                if (!empty($_POST['password']) && !empty($_POST['new_password'])) {
+                    if ($_POST['password'] == $_POST['new_password'])
+                    $errors[] = "New and old password cannot be the same.";
+                }
+
                 if (!empty($_POST['password'])) {
                     if ($fetched_password != $_POST['password']) {
                         $errors[] = "Incorrect old password.";
@@ -175,9 +182,9 @@ include 'menu.php';
                     <tr>
                         <td>Gender</td>
                         <td>
-                            <input type='radio' id='male' name='gender' value='male' />
+                            <input type='radio' id='male' name='gender' value='male' <?php echo ($fetched_gender == 'male') ? 'checked' : ''; ?> />
                             <label for="male">Male</label><br>
-                            <input type='radio' id='female' name='gender' value='female' />
+                            <input type='radio' id='female' name='gender' value='female' <?php echo ($fetched_gender == 'female') ? 'checked' : ''; ?> />
                             <label for="female">Female</label>
                         </td>
                     </tr>
@@ -200,7 +207,7 @@ include 'menu.php';
                         <td></td>
                         <td>
                             <input type='submit' value='Save Changes' class='btn btn-primary' />
-                            <a href='customer_listing.php' class='btn btn-danger'>Back to read products</a>
+                            <a href='customer_listing.php' class='btn btn-danger'>Back to read customers</a>
                         </td>
                     </tr>
                 </table>

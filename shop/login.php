@@ -134,7 +134,6 @@ session_regenerate_id(true);
                         $fetched_status = $row['account_status'];
                         if ($fetched_password === $password) {
                             if ($fetched_status == 1) {
-                                $_SESSION['user_id'] = 1;
                                 $_SESSION['username'] = $email;
                                 $_SESSION['is_logged_in'] = true;
                                 header('Location: product_listing.php');
