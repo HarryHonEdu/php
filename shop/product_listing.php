@@ -8,7 +8,7 @@
     <link rel="icon"
         href="https://upload-os-bbs.hoyolab.com/upload/2022/06/13/100427891/51296d07ef153ca7dd744dc31874d548_4734072724131588175.png"
         type="image/png">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 
 <body>
@@ -35,25 +35,46 @@
         
         // select all data
         $query = "SELECT id, name, description, price, product_cat_name FROM products
-        INNER JOIN product_cat ON products.product_cat = product_cat.product_cat_id ORDER BY id DESC";
+        INNER JOIN product_cat ON products.product_cat = product_cat.product_cat_id";
+
+        $search = isset($_GET['name']) ? $_GET['name'] : "";
+
+        if (!empty($search)) {
+            $query .= " WHERE name LIKE :search";
+        }
+
+        $sort_column = isset($_GET['sort']) ? $_GET['sort'] : "id";
+        $sort_order = (isset($_GET['ascdesc']) && $_GET['ascdesc'] == "desc") ? "DESC" : "ASC";
+
+        $allowed_columns = ["name", "price"];
+        if (!in_array($sort_column, $allowed_columns)) {
+            $sort_column = "id";
+        }
+
+        $query .= " ORDER BY $sort_column $sort_order";
+
         $stmt = $con->prepare($query);
+
+        if (!empty($search)) {
+            $search = "%$search%";
+            $stmt->bindParam(':search', $search);
+        }
+
         $stmt->execute();
 
-        // this is how to get number of rows returned
         $num = $stmt->rowCount();
 
         // link to create record form
         echo "<br> <div class='container-fiuld d-flex gap-2 justify-content-between align-items-center'>";
         echo "<a href='product_create.php' class='btn btn-primary m-b-1em mb-2'>Create New Product</a>";
         echo "<div class='d-flex align-items-center'>
-        <input type='text' class='form-control me-2 mb-2' placeholder='Search...' style='width: 200px; height: 38px;'></input>";
+        <form method='GET' class='d-flex align-items-center'>
+        <input type='text' name='name' class='form-control me-2 mb-2' placeholder='Search...' style='width: 200px; height: 38px;'></input>";
         echo "<br><button type='submit' class='btn btn-primary m-b-1em mb-2'>Search</button>";
-        echo "</div></div>";
+        echo "</form></div></div>";
 
         //check if more than 0 record found
         if ($num > 0) {
-            $row = $stmt->fetch(PDO::FETCH_ASSOC);
-            extract($row);
             // data from database will be here
             echo "<table class='table table-hover table-responsive table-bordered'>";//start table
         
