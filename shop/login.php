@@ -156,7 +156,6 @@ session_regenerate_id(true);
                 }
             }
 
-
             ?>
             <button class="btn btn-custom w-100 py-2" type="submit">Sign in</button>
         </form>

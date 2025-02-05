@@ -32,7 +32,13 @@
         include 'config/database.php';
 
         // delete message prompt will be here
-        
+        $action = isset($_GET['action']) ? $_GET['action'] : "";
+
+        // if it was redirected from delete.php
+        if ($action == 'deleted') {
+            echo "<div class='alert alert-warning'>Record was deleted.</div>";
+        }
+
         // select all data
         $query = "SELECT id, name, description, price, product_cat_name FROM products
         INNER JOIN product_cat ON products.product_cat = product_cat.product_cat_id";
@@ -40,7 +46,7 @@
         $search = isset($_GET['name']) ? $_GET['name'] : "";
 
         if (!empty($search)) {
-            $query .= " WHERE name LIKE :search";
+            $query .= " WHERE name LIKE :search OR product_cat_name LIKE :search";
         }
 
         $sort_column = isset($_GET['sort']) ? $_GET['sort'] : "id";
@@ -76,6 +82,7 @@
         //check if more than 0 record found
         if ($num > 0) {
             // data from database will be here
+            echo "Total Products: <strong>" . $num . "</strong>";
             echo "<table class='table table-hover table-responsive table-bordered'>";//start table
         
             //creating our table heading
@@ -131,6 +138,19 @@
     </div> <!-- end .container -->
 
     <!-- confirm delete record will be here -->
+    <script type='text/javascript'>
+        // confirm record deletion
+        function delete_user(id) {
+
+            var answer = confirm('Are you sure?');
+            if (answer) {
+                // if user clicked ok,
+                // pass the id to delete.php and execute the delete query
+                window.location = 'product_delete.php?id=' + id;
+            }
+        }
+    </script>
+
 
 </body>
 

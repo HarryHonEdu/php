@@ -36,12 +36,32 @@
                 $password = $_POST['password'];
                 $firstname = $_POST['firstname'];
                 $lastname = $_POST['lastname'];
+                $email = $_POST['email'];
 
                 $dob = $_POST['dateofbirth'];
                 $errors = [];
                 //Check Username
                 if (empty($username)) {
                     $errors[] = 'Username is required.';
+                } else {
+                    $check_query = "SELECT username FROM customers WHERE username = :username";
+                    $check_stmt = $con->prepare($check_query);
+                    $check_stmt->bindParam(':username', $username);
+                    $check_stmt->execute();
+                    if ($check_stmt->rowCount() > 0) {
+                        $errors[] = "The username '{$username}' is already taken. Please choose a different one.";
+                    }
+                }
+                if (empty($email)) {
+                    $errors[] = 'Email is required.';
+                } else {
+                    $check_query = "SELECT email FROM customers WHERE email = :email";
+                    $check_stmt = $con->prepare($check_query);
+                    $check_stmt->bindParam(':email', $email);
+                    $check_stmt->execute();
+                    if ($check_stmt->rowCount() > 0) {
+                        $errors[] = "The username '{$email}' is already taken. Please choose a different one.";
+                    }
                 }
                 //Check Password
                 if (empty($password)) {
@@ -74,12 +94,13 @@
                     echo "</ul></div>";
                 } else {
                     // insert query
-                    $query = "INSERT INTO customers SET username=:username, password=:password, first_name=:first_name, last_name=:last_name, 
+                    $query = "INSERT INTO customers SET username=:username, email=:email, password=:password, first_name=:first_name, last_name=:last_name, 
                     gender=:gender, date_of_birth=:date_of_birth";
                     // prepare query for execution
                     $stmt = $con->prepare($query);
                     // bind the parameters
                     $stmt->bindParam(':username', $username);
+                    $stmt->bindParam(':email', $email);
                     $stmt->bindParam(':password', $password);
                     $stmt->bindParam(':first_name', $firstname);
                     $stmt->bindParam(':last_name', $lastname);
@@ -108,6 +129,10 @@
                 <tr>
                     <td>Username</td>
                     <td><input type='text' name='username' class='form-control' /></td>
+                </tr>
+                <tr>
+                    <td>Email</td>
+                    <td><input type='email' name='email' class='form-control' /></td>
                 </tr>
                 <tr>
                     <td>Password</td>
