@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Feb 05, 2025 at 07:38 AM
+-- Generation Time: Feb 12, 2025 at 06:26 AM
 -- Server version: 8.3.0
 -- PHP Version: 8.2.18
 
@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS `customers` (
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `email` (`email`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf16;
+) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf16;
 
 --
 -- Dumping data for table `customers`
@@ -50,6 +50,7 @@ CREATE TABLE IF NOT EXISTS `customers` (
 
 INSERT INTO `customers` (`user_id`, `username`, `email`, `password`, `first_name`, `last_name`, `gender`, `date_of_birth`, `registration_time`, `account_status`) VALUES
 (1, 'Harryhon0620', '0620harry@gmail.com', 'werwer', 'werwer', 'werwer', 'male', '2024-12-04', '2024-12-18 05:42:27', 1),
+(7, 'James', 'james@gmail.com', '123', 'James', 'Woo', 'male', '2011-06-30', '2025-02-12 06:12:59', 1),
 (3, 'Storyut', 'story@gmail.com', '123456', 'Harry', 'Hon', 'male', '2001-06-12', '2025-01-08 05:07:46', 1),
 (4, 'Harry Hon', 'storyut@gmail.com', '111111', 'Harry', 'Hon', 'male', '2005-06-20', '2025-01-08 05:46:54', 1),
 (5, 'James Woo', 'jameswoo@gmail.com', '123', 'John', 'Woo', 'male', '1996-07-24', '2025-01-22 05:31:15', 1),
@@ -74,7 +75,7 @@ CREATE TABLE IF NOT EXISTS `products` (
   `created` datetime NOT NULL,
   `modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `products`

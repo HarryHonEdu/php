@@ -64,41 +64,6 @@
         if (!empty($search)) {
             $search = "%$search%";
             $stmt->bindParam(':search', $search);
-        }
-
-        $stmt->execute();
-
-        $num = $stmt->rowCount();
-
-        // link to create record form
-        echo "<br> <div class='container-fiuld d-flex gap-2 justify-content-between align-items-center'>";
-        echo "<a href='product_create.php' class='btn btn-primary m-b-1em mb-2'>Create New Product</a>";
-        echo "<div class='d-flex align-items-center'>
-        <form method='GET' class='d-flex align-items-center'>
-        <input type='text' name='name' class='form-control me-2 mb-2' placeholder='Search...' style='width: 200px; height: 38px;'></input>";
-        echo "<br><button type='submit' class='btn btn-primary m-b-1em mb-2'>Search</button>";
-        echo "</form></div></div>";
-
-        //check if more than 0 record found
-        if ($num > 0) {
-            // data from database will be here
-            echo "Total Products: <strong>" . $num . "</strong>";
-            echo "<table class='table table-hover table-responsive table-bordered'>";//start table
-        
-            //creating our table heading
-            echo "<tr>";
-            echo "<th>ID</th>";
-            echo "<th><div class='d-flex gap-2 align-items-center'>Name
-                <a href='?sort=name&ascdesc=asc'><i class='fa-solid fa-caret-up'></i></a> <!-- Ascending sort icon -->       
-                <a href='?sort=name&ascdesc=desc'><i class='fa-solid fa-caret-down'></i> <!-- Descending sort icon -->
-            </div></th>";
-            echo "<th>Description</th>";
-            echo "<th>Category</th>";
-            echo "<th><div class='d-flex gap-2'>Price
-                <a href='?sort=price&ascdesc=asc'><i class='fa-solid fa-caret-up'></i> <!-- Ascending sort icon -->
-                <a href='?sort=price&ascdesc=desc'><i class='fa-solid fa-caret-down'></i> <!-- Descending sort icon -->
-            </div></th>";
-            echo "<th>Action</th>";
             echo "</tr>";
 
             // table body will be here
